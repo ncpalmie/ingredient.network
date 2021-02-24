@@ -1,13 +1,10 @@
 import React from 'react';
-import { MapInteractionCSS } from 'react-map-interaction';
-import Node from './components/Node';
+import Graph from './components/Graph';
 import './css/App.css';
 
 function App() {
   return (
-    <MapInteractionCSS>
-      <Node />
-    </MapInteractionCSS>
+    <Graph />
   );
 }
 
