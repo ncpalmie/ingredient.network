@@ -4,7 +4,7 @@ import useMousePos from './useMousePos';
 import '../css/Graph.css';
 
 function Node(props) {
-  const { nodeData, setNodePos } = props;
+  const { nodeData, setNodePos, nodeRadius } = props;
   const { mx, my } = useMousePos();
 
   return (
@@ -15,7 +15,7 @@ function Node(props) {
       onKeyDown={() => {}}
       role="button"
       tabIndex={0}
-      style={{ left: nodeData.x, top: nodeData.y }}
+      style={{ left: nodeData.x, top: nodeData.y + nodeRadius * 0 }}
     >
       <p>
         Node
@@ -40,6 +40,7 @@ Node.propTypes = {
     y: PropTypes.number.isRequired,
   }).isRequired,
   setNodePos: PropTypes.func.isRequired,
+  nodeRadius: PropTypes.number.isRequired,
 };
 
 export default Node;

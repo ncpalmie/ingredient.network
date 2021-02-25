@@ -4,7 +4,7 @@ import './css/App.css';
 
 function App() {
   return (
-    <Graph />
+    <Graph nodeRadius={100} />
   );
 }
 

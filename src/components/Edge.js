@@ -9,8 +9,8 @@ function Edge(props) {
     <hr
       className="Edge"
       style={{
-        left: edgeData.x + 50,
-        top: edgeData.y - 80,
+        left: edgeData.x,
+        top: edgeData.y,
         height: edgeData.dist,
         transform: `rotate(${edgeData.angle}rad)`,
       }}
