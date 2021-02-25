@@ -4,38 +4,42 @@ import useMousePos from './useMousePos';
 import '../css/Graph.css';
 
 function Node(props) {
-  const { x } = useMousePos();
-  const { mapInfo } = props;
+  const { nodeData, setNodePos } = props;
+  const { mx, my } = useMousePos();
 
   return (
     <div
       className="Node"
       label="node"
-      onClick={() => {}}
+      onClick={() => { setNodePos(nodeData.id, mx, my); }}
       onKeyDown={() => {}}
       role="button"
       tabIndex={0}
+      style={{ left: nodeData.x, top: nodeData.y }}
     >
       <p>
-        Mouse at
+        Node
         {' '}
-        {x}
-        Graph at
-        {' '}
-        {mapInfo.translation.x}
+        {nodeData.id}
       </p>
     </div>
   );
 }
 
 Node.propTypes = {
-  mapInfo: PropTypes.shape({
-    scale: PropTypes.number.isRequired,
-    translation: PropTypes.shape({
-      x: PropTypes.number.isRequired,
-      y: PropTypes.number.isRequired,
-    }),
+  // mapInfo: PropTypes.shape({
+  //   scale: PropTypes.number.isRequired,
+  //   translation: PropTypes.shape({
+  //     x: PropTypes.number.isRequired,
+  //     y: PropTypes.number.isRequired,
+  //   }),
+  // }).isRequired,
+  nodeData: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    x: PropTypes.number.isRequired,
+    y: PropTypes.number.isRequired,
   }).isRequired,
+  setNodePos: PropTypes.func.isRequired,
 };
 
 export default Node;

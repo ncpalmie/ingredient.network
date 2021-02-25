@@ -7,13 +7,10 @@
 }
 
 .Edge {
-    background:#E94F37;
-    color:#E94F37;
-    height: 500px;
-    width: 20px;
+    background:#3775e9;
+    width: 10px;
     border: 0px;
     position: absolute;
-    transform: rotate(45deg);
 }
 
 .Graph {
