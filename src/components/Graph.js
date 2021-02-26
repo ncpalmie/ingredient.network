@@ -8,26 +8,21 @@ import '../css/Graph.css';
 function Graph(props) {
   const { nodeRadius } = props;
   const [mapData, setMapData] = useState({ scale: 1, translation: { x: 0, y: 0 } });
-  const [nodes, setNodes] = useState([{ id: 0, x: 0, y: 0 }, { id: 1, x: 80, y: 80 }]);
+  const [nodes, setNodes] = useState([{ id: 0, x: 0, y: 80 }, { id: 1, x: 80, y: 80 }]);
   const [edges] = useState([{ n1: 0, n2: 1 }]);
 
   const getEdgeData = (id1, id2) => {
     let n1 = null;
     let n2 = null;
     const edgeNodes = nodes.filter((node) => (node.id === id1 || node.id === id2));
-    if (Math.sqrt(edgeNodes[0].x ** 2 + edgeNodes[0].y ** 2)
-    <= Math.sqrt(edgeNodes[1].x ** 2 + edgeNodes[1].y ** 2)) {
-      [n1, n2] = edgeNodes;
-    } else {
-      [n2, n1] = edgeNodes;
-    }
-    const angle = -Math.atan((n1.x - n2.x) / (n1.y - n2.y));
+    [n1, n2] = edgeNodes;
+    const angle = (n1.y >= n2.y ? Math.PI : 0) + -Math.atan((n1.x - n2.x) / (n1.y - n2.y));
     const dist = (Math.sqrt((n2.x - n1.x) ** 2 + (n2.y - n1.y) ** 2));
     return {
       angle,
       dist,
-      x: n1.x - ((dist / 2) * Math.sin(angle)) + nodeRadius,
-      y: n1.y - ((dist / 2) - (((dist / 2) * Math.sin(angle)) / Math.tan(angle))) + nodeRadius,
+      x: n1.x - ((dist / 2) * Math.sin(angle)),
+      y: n1.y - ((dist / 2) - (((dist / 2) * Math.sin(angle)) / Math.tan(angle))),
     };
   };
 

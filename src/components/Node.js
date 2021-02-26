@@ -15,12 +15,16 @@ function Node(props) {
       onKeyDown={() => {}}
       role="button"
       tabIndex={0}
-      style={{ left: nodeData.x, top: nodeData.y + nodeRadius * 0 }}
+      style={{ left: nodeData.x - nodeRadius, top: nodeData.y - nodeRadius }}
     >
       <p>
         Node
         {' '}
         {nodeData.id}
+        @
+        {nodeData.x}
+        ,
+        {nodeData.y}
       </p>
     </div>
   );
