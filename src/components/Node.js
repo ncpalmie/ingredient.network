@@ -1,17 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import useMousePos from './useMousePos';
 import '../css/Graph.css';
 
 function Node(props) {
-  const { nodeData, setNodePos, nodeRadius } = props;
-  const { mx, my } = useMousePos();
+  const { nodeData, nodeRadius } = props;
 
   return (
     <div
       className="Node"
       label="node"
-      onClick={() => { setNodePos(nodeData.id, mx, my); }}
       onKeyDown={() => {}}
       role="button"
       tabIndex={0}
@@ -43,7 +40,6 @@ Node.propTypes = {
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
   }).isRequired,
-  setNodePos: PropTypes.func.isRequired,
   nodeRadius: PropTypes.number.isRequired,
 };
 
