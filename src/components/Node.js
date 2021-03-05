@@ -3,16 +3,24 @@ import PropTypes from 'prop-types';
 import '../css/Graph.css';
 
 function Node(props) {
+  const edgeWidth = 10;
   const { nodeData, nodeRadius } = props;
+  const nodeX = (nodeData.x) - nodeRadius + (edgeWidth / 2);
+  const nodeY = nodeData.y - nodeRadius + (edgeWidth / 2);
+  const smallNodeX = (nodeData.x + (edgeWidth / 2)) - (nodeRadius * 0.75) - edgeWidth / 2;
+  const smallNodeY = nodeData.y - (nodeRadius * 0.75) + edgeWidth / 2;
 
   return (
     <div
-      className="Node"
+      className={nodeData.orbit === 2 ? 'SmallNode' : 'Node'}
       label="node"
       onKeyDown={() => {}}
       role="button"
       tabIndex={0}
-      style={{ left: nodeData.x - nodeRadius, top: nodeData.y - nodeRadius }}
+      style={{
+        left: nodeData.orbit === 2 ? smallNodeX : nodeX,
+        top: nodeData.orbit === 2 ? smallNodeY : nodeY,
+      }}
     >
       <p>
         Node
@@ -39,6 +47,7 @@ Node.propTypes = {
     id: PropTypes.number.isRequired,
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
+    orbit: PropTypes.number.isRequired,
   }).isRequired,
   nodeRadius: PropTypes.number.isRequired,
 };

@@ -1,6 +1,14 @@
 .Node {
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    position: absolute;
+    background: #E94F37;
+}
+
+.SmallNode {
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     position: absolute;
     background: #E94F37;
@@ -9,6 +17,13 @@
 .Edge {
     background:#3775e9;
     width: 10px;
+    border: 0px;
+    position: absolute;
+}
+
+.SmallEdge {
+    background:#3775e9;
+    width: 6px;
     border: 0px;
     position: absolute;
 }

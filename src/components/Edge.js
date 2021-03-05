@@ -7,7 +7,7 @@ function Edge(props) {
 
   return (
     <hr
-      className="Edge"
+      className={edgeData.smallEdge ? 'SmallEdge' : 'Edge'}
       style={{
         left: edgeData.x,
         top: edgeData.y,
@@ -24,6 +24,7 @@ Edge.propTypes = {
     dist: PropTypes.number.isRequired,
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
+    smallEdge: PropTypes.bool.isRequired,
   }).isRequired,
 };
 
