@@ -4,7 +4,9 @@ import '../css/Graph.css';
 
 function Node(props) {
   const edgeWidth = 10;
-  const { nodeData, nodeRadius } = props;
+  const { nodeData, nodeRadius, nodeName } = props;
+
+  // Node positioning math
   const nodeX = (nodeData.x) - nodeRadius + (edgeWidth / 2);
   const nodeY = nodeData.y - nodeRadius + (edgeWidth / 2);
   const smallNodeX = (nodeData.x + (edgeWidth / 2)) - (nodeRadius * 0.75) - edgeWidth / 2;
@@ -25,7 +27,7 @@ function Node(props) {
       <p>
         Node
         {' '}
-        {nodeData.id}
+        {nodeName}
         @
         {nodeData.x}
         ,
@@ -50,6 +52,7 @@ Node.propTypes = {
     orbit: PropTypes.number.isRequired,
   }).isRequired,
   nodeRadius: PropTypes.number.isRequired,
+  nodeName: PropTypes.string.isRequired,
 };
 
 export default Node;

@@ -5,12 +5,12 @@ import Header from './components/Header';
 import './css/App.css';
 
 function App() {
-  const [searchVal, setSearchVal] = useState('');
+  const [searchIngredient, setSearchIngredient] = useState('');
 
   return (
     <Box>
-      <Header setSearchVal={setSearchVal} />
-      <Graph nodeRadius={75} searchVal={searchVal} />
+      <Header setSearchIngredient={setSearchIngredient} />
+      <Graph nodeRadius={75} searchIngredient={searchIngredient} />
     </Box>
   );
 }

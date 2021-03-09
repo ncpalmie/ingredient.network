@@ -6,6 +6,7 @@ import Node from './Node';
 import Edge from './Edge';
 import '../css/Graph.css';
 
+// Generates a set of example nodes for testing
 const generateRandomNodes = (num) => {
   const newNodes = [];
   const newEdges = [];
@@ -31,7 +32,7 @@ const generateRandomNodes = (num) => {
 const graphData = generateRandomNodes(22);
 
 function Graph(props) {
-  const { nodeRadius } = props;
+  const { nodeRadius, searchIngredient } = props;
   const [mapData, setMapData] = useState({ scale: 1, translation: { x: 0, y: 0 } });
   const [nodes, setNodes] = useState(graphData[0]);
   const [edges] = useState(graphData[1]);
@@ -98,6 +99,7 @@ function Graph(props) {
               key={node.id}
               nodeRadius={nodeRadius}
               nodeData={node}
+              nodeName={node.id === 0 ? searchIngredient : ''}
             />
           ))}
         </div>
@@ -108,6 +110,7 @@ function Graph(props) {
 
 Graph.propTypes = {
   nodeRadius: PropTypes.number.isRequired,
+  searchIngredient: PropTypes.string.isRequired,
 };
 
 export default Graph;
