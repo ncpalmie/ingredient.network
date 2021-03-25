@@ -5,7 +5,7 @@ import Header from './components/Header';
 import './css/App.css';
 
 function App() {
-  const [searchIngredient, setSearchIngredient] = useState('');
+  const [searchIngredient, setSearchIngredient] = useState();
 
   return (
     <Box>

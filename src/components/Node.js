@@ -12,9 +12,10 @@ function Node(props) {
   const smallNodeX = (nodeData.x + (edgeWidth / 2)) - (nodeRadius * 0.75) - edgeWidth / 2;
   const smallNodeY = nodeData.y - (nodeRadius * 0.75) + edgeWidth / 2;
 
+  // Returns node JSX
   return (
     <div
-      className={nodeData.orbit === 2 ? 'SmallNode' : 'Node'}
+      className={nodeData.orbit === 2 ? 'small-node' : 'node'}
       label="node"
       onKeyDown={() => {}}
       role="button"
@@ -25,8 +26,6 @@ function Node(props) {
       }}
     >
       <p>
-        Node
-        {' '}
         {nodeName}
         @
         {nodeData.x}
@@ -52,7 +51,11 @@ Node.propTypes = {
     orbit: PropTypes.number.isRequired,
   }).isRequired,
   nodeRadius: PropTypes.number.isRequired,
-  nodeName: PropTypes.string.isRequired,
+  nodeName: PropTypes.string,
+};
+
+Node.defaultProps = {
+  nodeName: 'NO INGREDIENT',
 };
 
 export default Node;

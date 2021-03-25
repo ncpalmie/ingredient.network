@@ -1,4 +1,4 @@
-.Node {
+.node {
     width: 150px;
     height: 150px;
     border-radius: 50%;
@@ -6,7 +6,7 @@
     background: #E94F37;
 }
 
-.SmallNode {
+.small-node {
     width: 120px;
     height: 120px;
     border-radius: 50%;
@@ -14,21 +14,21 @@
     background: #E94F37;
 }
 
-.Edge {
+.edge {
     background:#3775e9;
     width: 10px;
     border: 0px;
     position: absolute;
 }
 
-.SmallEdge {
+.small-edge {
     background:#3775e9;
     width: 6px;
     border: 0px;
     position: absolute;
 }
 
-.Graph {
+.graph {
     width: 100vw;
     height: 80vh;
     position: relative;

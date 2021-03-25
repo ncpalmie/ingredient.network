@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapInteractionCSS } from 'react-map-interaction';
 import { Button } from 'grommet';
 import PropTypes from 'prop-types';
@@ -35,7 +35,7 @@ function Graph(props) {
   const { nodeRadius, searchIngredient } = props;
   const [mapData, setMapData] = useState({ scale: 1, translation: { x: 0, y: 0 } });
   const [nodes, setNodes] = useState(graphData[0]);
-  const [edges] = useState(graphData[1]);
+  const [edges, setEdges] = useState(graphData[1]);
 
   // Generates edges using node locations
   const getEdgeData = (id1, id2) => {
@@ -57,13 +57,16 @@ function Graph(props) {
 
   // Takes a list of nodes and orbits them at the given radius around the main node (orbit=0)
   const orbitNodes = (radius) => {
-    let innerAngle = -(4 * Math.PI) / (nodes.length - 1);
-    let outerAngle = -(2 * Math.PI) / (nodes.length - 1);
+    const numInnerNodes = nodes.filter((node) => node.orbit === 1).length;
+    const numOuterNodes = nodes.filter((node) => node.orbit === 2).length;
+    let innerAngle = -(4 * Math.PI) / (numInnerNodes - 1);
+    let outerAngle = -(2 * Math.PI) / (numOuterNodes - 1);
     setNodes(nodes.sort((node1, node2) => node1.id - node2.id));
     setNodes(nodes.map((node) => {
       if (node.orbit === 1) {
-        innerAngle += (4 * Math.PI) / (nodes.length - 1);
+        innerAngle += (4 * Math.PI) / (numInnerNodes - 1);
         return {
+          name: node.name,
           id: node.id,
           orbit: node.orbit,
           x: Math.floor(nodes[0].x + (radius * Math.sin(innerAngle))),
@@ -71,8 +74,11 @@ function Graph(props) {
         };
       }
       if (node.orbit === 2) {
-        outerAngle += (4 * Math.PI) / (nodes.length - 1);
+        // First outer node gets special spacing, other outer nodes depend on number of inner nodes
+        outerAngle += node.id === nodes.find((element) => element.orbit === 2).id
+          ? (4 * Math.PI) / (numOuterNodes - 1) : (2 * Math.PI) / (numInnerNodes - 1);
         return {
+          name: node.name,
           id: node.id,
           orbit: node.orbit,
           x: Math.floor(nodes[0].x + (radius * 1.75 * Math.sin(outerAngle))),
@@ -83,11 +89,57 @@ function Graph(props) {
     }));
   };
 
+  // Generates nodes based on ingredient connections
+  const generateNodes = () => {
+    let id = 1;
+    const newNodes = [];
+    const newEdges = [];
+    const mainNode = {
+      name: searchIngredient.name, id: 0, x: 750, y: 440, orbit: 0,
+    };
+    newNodes.push(mainNode);
+
+    // Form strong node connections
+    searchIngredient.strongConnections.forEach((ingredient) => {
+      newNodes.push({
+        name: ingredient,
+        id,
+        orbit: 1,
+        x: 0,
+        y: 0,
+      });
+      newEdges.push({ n1: 0, n2: id });
+      id += 1;
+    });
+
+    // Form weak node connections
+    searchIngredient.weakConnections.forEach((ingredient) => {
+      newNodes.push({
+        name: ingredient,
+        id,
+        orbit: 2,
+        x: 0,
+        y: 0,
+      });
+      newEdges.push({ n1: 0, n2: id });
+      id += 1;
+    });
+
+    setNodes(newNodes);
+    setEdges(newEdges);
+  };
+
+  useEffect(() => {
+    if (searchIngredient) {
+      generateNodes();
+    }
+  }, [searchIngredient]);
+
   return (
     <div>
       <Button label="Orbit Nodes" onClick={() => { orbitNodes(300); }} />
       <MapInteractionCSS value={mapData} onChange={(value) => setMapData(value)}>
-        <div className="Graph">
+        <div className="graph">
           {edges.map((edge) => (
             <Edge
               key={edge.n1.toString() + edge.n2.toString()}
@@ -99,7 +151,7 @@ function Graph(props) {
               key={node.id}
               nodeRadius={nodeRadius}
               nodeData={node}
-              nodeName={node.id === 0 ? searchIngredient : ''}
+              nodeName={node.name}
             />
           ))}
         </div>
@@ -110,7 +162,18 @@ function Graph(props) {
 
 Graph.propTypes = {
   nodeRadius: PropTypes.number.isRequired,
-  searchIngredient: PropTypes.string.isRequired,
+  searchIngredient: PropTypes.shape({
+    _id: PropTypes.string,
+    name: PropTypes.string.isRequired,
+    strongConnections: PropTypes.arrayOf(PropTypes.string).isRequired,
+    weakConnections: PropTypes.arrayOf(PropTypes.string).isRequired,
+  }),
+};
+
+Graph.defaultProps = {
+  searchIngredient: {
+    id: -1, name: 'NO INGREDIENT', strongConnections: [], weakConnections: [],
+  },
 };
 
 export default Graph;

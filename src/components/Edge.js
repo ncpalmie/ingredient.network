@@ -7,7 +7,7 @@ function Edge(props) {
 
   return (
     <hr
-      className={edgeData.smallEdge ? 'SmallEdge' : 'Edge'}
+      className={edgeData.smallEdge ? 'small-edge' : 'edge'}
       style={{
         left: edgeData.x,
         top: edgeData.y,
