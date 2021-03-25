@@ -55,16 +55,17 @@ function Graph(props) {
     };
   };
 
+  // FIX ISSUE WHERE DISPLAY ONLY WORKS CORRECTLY FOR ODD NUMBER OF INNER NODES
   // Takes a list of nodes and orbits them at the given radius around the main node (orbit=0)
   const orbitNodes = (radius) => {
     const numInnerNodes = nodes.filter((node) => node.orbit === 1).length;
     const numOuterNodes = nodes.filter((node) => node.orbit === 2).length;
-    let innerAngle = -(4 * Math.PI) / (numInnerNodes - 1);
-    let outerAngle = -(2 * Math.PI) / (numOuterNodes - 1);
+    let innerAngle = -(2 * Math.PI) / (numInnerNodes);
+    let outerAngle = -(Math.PI) / (numOuterNodes);
     setNodes(nodes.sort((node1, node2) => node1.id - node2.id));
     setNodes(nodes.map((node) => {
       if (node.orbit === 1) {
-        innerAngle += (4 * Math.PI) / (numInnerNodes - 1);
+        innerAngle += (4 * Math.PI) / (numInnerNodes);
         return {
           name: node.name,
           id: node.id,
@@ -76,7 +77,7 @@ function Graph(props) {
       if (node.orbit === 2) {
         // First outer node gets special spacing, other outer nodes depend on number of inner nodes
         outerAngle += node.id === nodes.find((element) => element.orbit === 2).id
-          ? (4 * Math.PI) / (numOuterNodes - 1) : (2 * Math.PI) / (numInnerNodes - 1);
+          ? (4 * Math.PI) / (numOuterNodes) : (2 * Math.PI) / (numInnerNodes);
         return {
           name: node.name,
           id: node.id,
