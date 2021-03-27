@@ -17,4 +17,18 @@ router.get('/ingredients/:name', (req, res) => {
   });
 });
 
+// Route for updating image height offset
+router.patch('/ingredients/:name', (req, res) => {
+  const regex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
+  ingredientsModel.findOne({ name: req.params.name.toLowerCase().replace(regex, '') },
+    { $push: { imgHeightOffset: req.body.imgHeightOffset } },
+    (err, ingredient) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(ingredient);
+      }
+    });
+});
+
 module.exports = router;

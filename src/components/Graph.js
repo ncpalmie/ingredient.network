@@ -36,6 +36,7 @@ function Graph(props) {
   const [mapData, setMapData] = useState({ scale: 1, translation: { x: 0, y: 0 } });
   const [nodes, setNodes] = useState(graphData[0]);
   const [edges, setEdges] = useState(graphData[1]);
+  const nextId = 0;
 
   // Generates edges using node locations
   const getEdgeData = (id1, id2) => {
@@ -65,15 +66,12 @@ function Graph(props) {
 
     newNodes = newNodes.map((node) => {
       if (node.orbit === 1) {
+        const newNode = node;
         incrementAngle += (2 * Math.PI) / (numInnerNodes);
         if (!outerIncrementAngle) outerIncrementAngle = Math.PI + incrementAngle;
-        return {
-          name: node.name,
-          id: node.id,
-          orbit: node.orbit,
-          x: Math.floor(nodes[0].x + (radius * Math.sin(incrementAngle))),
-          y: Math.floor(nodes[0].y - (radius * Math.cos(incrementAngle))),
-        };
+        newNode.x = Math.floor(nodes[0].x + (radius * Math.sin(incrementAngle)));
+        newNode.y = Math.floor(nodes[0].y - (radius * Math.cos(incrementAngle)));
+        return newNode;
       }
       return node;
     });
@@ -81,14 +79,11 @@ function Graph(props) {
     if (numInnerIsEven) outerIncrementAngle += Math.PI / (numInnerNodes);
     newNodes = newNodes.map((node) => {
       if (node.orbit === 2) {
+        const newNode = node;
         outerIncrementAngle += (2 * Math.PI) / numInnerNodes;
-        return {
-          name: node.name,
-          id: node.id,
-          orbit: node.orbit,
-          x: Math.floor(nodes[0].x + (radius * 1.75 * Math.sin(outerIncrementAngle))),
-          y: Math.floor(nodes[0].y - (radius * 1.75 * Math.cos(outerIncrementAngle))),
-        };
+        newNode.x = Math.floor(nodes[0].x + (radius * 1.75 * Math.sin(outerIncrementAngle)));
+        newNode.y = Math.floor(nodes[0].y - (radius * 1.75 * Math.cos(outerIncrementAngle)));
+        return newNode;
       }
       return node;
     });
@@ -96,19 +91,28 @@ function Graph(props) {
     setNodes(newNodes);
   };
 
+  // Generates single node from given ingredient data
+  const generateNodeFromIngredient = (ingredientData, orbit) => ({
+    name: ingredientData.name,
+    id: nextId,
+    x: nextId === 0 ? 750 : 0,
+    y: nextId === 0 ? 440 : 0,
+    orbit,
+    nodeImage: {
+      imgUrl: ingredientData.imgUrl,
+      imgHeightOffset: ingredientData.imgHeightOffset,
+      imgWidthOffset: ingredientData.imgWidthOffset,
+      imgTopOffset: ingredientData.imgTopOffset,
+      imgLeftOffset: ingredientData.imgLeftOffset,
+    },
+  });
+
   // Generates nodes based on ingredient connections
   const generateNodes = () => {
     let id = 1;
     const newNodes = [];
     const newEdges = [];
-    const mainNode = {
-      name: searchIngredient.name,
-      id: 0,
-      x: 750,
-      y: 440,
-      orbit: 0,
-      nodeImage: searchIngredient.imgUrl,
-    };
+    const mainNode = generateNodeFromIngredient(searchIngredient);
     newNodes.push(mainNode);
 
     // Form strong node connections
@@ -116,9 +120,9 @@ function Graph(props) {
       newNodes.push({
         name: ingredient,
         id,
-        orbit: 1,
         x: 0,
         y: 0,
+        orbit: 1,
       });
       newEdges.push({ n1: 0, n2: id });
       id += 1;
@@ -129,9 +133,9 @@ function Graph(props) {
       newNodes.push({
         name: ingredient,
         id,
-        orbit: 2,
         x: 0,
         y: 0,
+        orbit: 2,
       });
       newEdges.push({ n1: 0, n2: id });
       id += 1;
@@ -181,7 +185,8 @@ Graph.propTypes = {
     strongConnections: PropTypes.arrayOf(PropTypes.string),
     weakConnections: PropTypes.arrayOf(PropTypes.string),
     imgUrl: PropTypes.string,
-    imgZoom: PropTypes.number,
+    imgHeightOffset: PropTypes.number,
+    imgWidthOffset: PropTypes.number,
     imgTopOffset: PropTypes.number,
     imgLeftOffset: PropTypes.number,
   }),
@@ -194,7 +199,8 @@ Graph.defaultProps = {
     strongConnections: [],
     weakConnections: [],
     imgUrl: '',
-    imgZoom: 0,
+    imgHeightOffset: 0,
+    imgWidthOffset: 0,
     imgTopOffset: 0,
     imgLeftOffset: 0,
   },

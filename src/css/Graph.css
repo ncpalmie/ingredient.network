@@ -4,13 +4,20 @@
     border-radius: 50%;
     position: absolute;
     background: #E94F37;
-    border: 2px solid #E94F37;
+    border: 3px solid #E94F37;
 }
 
-.node img {
+.node-img-container {
     height: 100%;
     width: 100%;
     border-radius: 50%;
+    position: absolute;
+    overflow: hidden;
+}
+
+.node img {
+    border-radius: 50%;
+    position: absolute;
 }
 
 .small-node {

@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box, Button } from 'grommet';
@@ -10,6 +8,11 @@ import {
   AiOutlineZoomOut,
 } from 'react-icons/ai';
 import '../css/Graph.css';
+import axios from 'axios';
+
+const updateNodeImage = (attributeEndpoint, delta) => {
+  // CONTINUE SETTING UP IMAGE MANIPULATION ROUTES
+};
 
 function Node(props) {
   const edgeWidth = 10;
@@ -17,7 +20,23 @@ function Node(props) {
     nodeData, nodeRadius, nodeName, nodeImage,
   } = props;
 
-  const nodeImageElement = nodeImage ? <img src={nodeImage}/> : null;
+  // Generate image element or null if no image data present
+  const imgHeight = 100 + nodeImage.imgHeightOffset;
+  const imgWidth = 100 + nodeImage.imgWidthOffset;
+  const nodeImageElement = nodeImage
+    ? (
+      <img
+        src={nodeImage.imgUrl}
+        alt={nodeName}
+        style={{
+          height: `${imgHeight.toString()}%`,
+          width: `${imgWidth.toString()}%`,
+          top: nodeImage.imgTopOffset,
+          left: nodeImage.imgLeftOffset,
+        }}
+      />
+    )
+    : null;
 
   // Node positioning math
   const nodeX = (nodeData.x) - nodeRadius + (edgeWidth / 2);
@@ -37,7 +56,9 @@ function Node(props) {
         top: nodeData.orbit === 2 ? smallNodeY : nodeY,
       }}
     >
-      {nodeImageElement}
+      <div className="node-img-container">
+        {nodeImageElement}
+      </div>
       <p>
         {nodeName}
         @
@@ -119,12 +140,18 @@ Node.propTypes = {
   }).isRequired,
   nodeRadius: PropTypes.number.isRequired,
   nodeName: PropTypes.string,
-  nodeImage: PropTypes.string,
+  nodeImage: PropTypes.shape({
+    imgUrl: PropTypes.string.isRequired,
+    imgHeightOffset: PropTypes.number.isRequired,
+    imgWidthOffset: PropTypes.number.isRequired,
+    imgTopOffset: PropTypes.number.isRequired,
+    imgLeftOffset: PropTypes.number.isRequired,
+  }),
 };
 
 Node.defaultProps = {
-  nodeImage: '',
-  nodeName: 'NO INGREDIENT'
+  nodeImage: null,
+  nodeName: 'NO INGREDIENT',
 };
 
 export default Node;

@@ -17,7 +17,10 @@ const ingredient = new Schema({
   imgUrl: {
     type: String,
   },
-  imgZoom: {
+  imgHeightOffset: {
+    type: Number,
+  },
+  imgWidthOffset: {
     type: Number,
   },
   imgTopOffset: {
