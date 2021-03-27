@@ -55,39 +55,45 @@ function Graph(props) {
     };
   };
 
-  // FIX ISSUE WHERE DISPLAY ONLY WORKS CORRECTLY FOR ODD NUMBER OF INNER NODES
   // Takes a list of nodes and orbits them at the given radius around the main node (orbit=0)
   const orbitNodes = (radius) => {
     const numInnerNodes = nodes.filter((node) => node.orbit === 1).length;
-    const numOuterNodes = nodes.filter((node) => node.orbit === 2).length;
-    let innerAngle = -(2 * Math.PI) / (numInnerNodes);
-    let outerAngle = -(Math.PI) / (numOuterNodes);
-    setNodes(nodes.sort((node1, node2) => node1.id - node2.id));
-    setNodes(nodes.map((node) => {
+    const numInnerIsEven = (numInnerNodes % 2) === 0;
+    let incrementAngle = -(2 * Math.PI) / (numInnerNodes);
+    let outerIncrementAngle = null;
+    let newNodes = nodes.sort((node1, node2) => node1.id - node2.id);
+
+    newNodes = newNodes.map((node) => {
       if (node.orbit === 1) {
-        innerAngle += (4 * Math.PI) / (numInnerNodes);
+        incrementAngle += (2 * Math.PI) / (numInnerNodes);
+        if (!outerIncrementAngle) outerIncrementAngle = Math.PI + incrementAngle;
         return {
           name: node.name,
           id: node.id,
           orbit: node.orbit,
-          x: Math.floor(nodes[0].x + (radius * Math.sin(innerAngle))),
-          y: Math.floor(nodes[0].y - (radius * Math.cos(innerAngle))),
-        };
-      }
-      if (node.orbit === 2) {
-        // First outer node gets special spacing, other outer nodes depend on number of inner nodes
-        outerAngle += node.id === nodes.find((element) => element.orbit === 2).id
-          ? (4 * Math.PI) / (numOuterNodes) : (2 * Math.PI) / (numInnerNodes);
-        return {
-          name: node.name,
-          id: node.id,
-          orbit: node.orbit,
-          x: Math.floor(nodes[0].x + (radius * 1.75 * Math.sin(outerAngle))),
-          y: Math.floor(nodes[0].y - (radius * 1.75 * Math.cos(outerAngle))),
+          x: Math.floor(nodes[0].x + (radius * Math.sin(incrementAngle))),
+          y: Math.floor(nodes[0].y - (radius * Math.cos(incrementAngle))),
         };
       }
       return node;
-    }));
+    });
+
+    if (numInnerIsEven) outerIncrementAngle += Math.PI / (numInnerNodes);
+    newNodes = newNodes.map((node) => {
+      if (node.orbit === 2) {
+        outerIncrementAngle += (2 * Math.PI) / numInnerNodes;
+        return {
+          name: node.name,
+          id: node.id,
+          orbit: node.orbit,
+          x: Math.floor(nodes[0].x + (radius * 1.75 * Math.sin(outerIncrementAngle))),
+          y: Math.floor(nodes[0].y - (radius * 1.75 * Math.cos(outerIncrementAngle))),
+        };
+      }
+      return node;
+    });
+
+    setNodes(newNodes);
   };
 
   // Generates nodes based on ingredient connections
