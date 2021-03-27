@@ -4,6 +4,13 @@
     border-radius: 50%;
     position: absolute;
     background: #E94F37;
+    border: 2px solid #E94F37;
+}
+
+.node img {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
 }
 
 .small-node {
@@ -12,6 +19,10 @@
     border-radius: 50%;
     position: absolute;
     background: #E94F37;
+}
+
+.node-debug-button {
+    position: absolute;
 }
 
 .edge {

@@ -102,7 +102,12 @@ function Graph(props) {
     const newNodes = [];
     const newEdges = [];
     const mainNode = {
-      name: searchIngredient.name, id: 0, x: 750, y: 440, orbit: 0,
+      name: searchIngredient.name,
+      id: 0,
+      x: 750,
+      y: 440,
+      orbit: 0,
+      nodeImage: searchIngredient.imgUrl,
     };
     newNodes.push(mainNode);
 
@@ -159,6 +164,7 @@ function Graph(props) {
               nodeRadius={nodeRadius}
               nodeData={node}
               nodeName={node.name}
+              nodeImage={node.nodeImage}
             />
           ))}
         </div>
@@ -171,15 +177,26 @@ Graph.propTypes = {
   nodeRadius: PropTypes.number.isRequired,
   searchIngredient: PropTypes.shape({
     _id: PropTypes.string,
-    name: PropTypes.string.isRequired,
-    strongConnections: PropTypes.arrayOf(PropTypes.string).isRequired,
-    weakConnections: PropTypes.arrayOf(PropTypes.string).isRequired,
+    name: PropTypes.string,
+    strongConnections: PropTypes.arrayOf(PropTypes.string),
+    weakConnections: PropTypes.arrayOf(PropTypes.string),
+    imgUrl: PropTypes.string,
+    imgZoom: PropTypes.number,
+    imgTopOffset: PropTypes.number,
+    imgLeftOffset: PropTypes.number,
   }),
 };
 
 Graph.defaultProps = {
   searchIngredient: {
-    id: -1, name: 'NO INGREDIENT', strongConnections: [], weakConnections: [],
+    id: -1,
+    name: 'NO INGREDIENT',
+    strongConnections: [],
+    weakConnections: [],
+    imgUrl: '',
+    imgZoom: 0,
+    imgTopOffset: 0,
+    imgLeftOffset: 0,
   },
 };
 

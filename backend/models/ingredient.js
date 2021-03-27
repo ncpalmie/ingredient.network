@@ -14,6 +14,18 @@ const ingredient = new Schema({
   weakConnections: {
     type: Array,
   },
+  imgUrl: {
+    type: String,
+  },
+  imgZoom: {
+    type: Number,
+  },
+  imgTopOffset: {
+    type: Number,
+  },
+  imgLeftOffset: {
+    type: Number,
+  },
 });
 
 module.exports = mongoose.model('ingredient', ingredient);

@@ -1,10 +1,23 @@
+/* eslint-disable */
+
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Box, Button } from 'grommet';
+import {
+  AiOutlinePlusSquare,
+  AiOutlineMinusSquare,
+  AiOutlineZoomIn,
+  AiOutlineZoomOut,
+} from 'react-icons/ai';
 import '../css/Graph.css';
 
 function Node(props) {
   const edgeWidth = 10;
-  const { nodeData, nodeRadius, nodeName } = props;
+  const {
+    nodeData, nodeRadius, nodeName, nodeImage,
+  } = props;
+
+  const nodeImageElement = nodeImage ? <img src={nodeImage}/> : null;
 
   // Node positioning math
   const nodeX = (nodeData.x) - nodeRadius + (edgeWidth / 2);
@@ -12,7 +25,6 @@ function Node(props) {
   const smallNodeX = (nodeData.x + (edgeWidth / 2)) - (nodeRadius * 0.75) - edgeWidth / 2;
   const smallNodeY = nodeData.y - (nodeRadius * 0.75) + edgeWidth / 2;
 
-  // Returns node JSX
   return (
     <div
       className={nodeData.orbit === 2 ? 'small-node' : 'node'}
@@ -25,6 +37,7 @@ function Node(props) {
         top: nodeData.orbit === 2 ? smallNodeY : nodeY,
       }}
     >
+      {nodeImageElement}
       <p>
         {nodeName}
         @
@@ -32,6 +45,60 @@ function Node(props) {
         ,
         {nodeData.y}
       </p>
+      <Box>
+        <Button
+          className="node-debug-button"
+          icon={<AiOutlineZoomOut />}
+          style={{
+            left: nodeData.orbit === 2 ? -45 : -40,
+            top: nodeData.orbit === 2 ? 40 : 60,
+          }}
+        />
+        <Button
+          className="node-debug-button"
+          icon={<AiOutlineZoomIn />}
+          style={{
+            left: nodeData.orbit === 2 ? -60 : -55,
+            top: nodeData.orbit === 2 ? 40 : 60,
+          }}
+        />
+      </Box>
+      <Box>
+        <Button
+          className="node-debug-button"
+          icon={<AiOutlinePlusSquare />}
+          style={{
+            left: nodeData.orbit === 2 ? 112 : 142,
+            top: nodeData.orbit === 2 ? 10 : 20,
+          }}
+        />
+        <Button
+          className="node-debug-button"
+          icon={<AiOutlineMinusSquare />}
+          style={{
+            left: nodeData.orbit === 2 ? 128 : 158,
+            top: nodeData.orbit === 2 ? 10 : 20,
+          }}
+        />
+      </Box>
+      <Box>
+        <Button
+          className="node-debug-button"
+          icon={<AiOutlinePlusSquare />}
+          style={{
+            left: nodeData.orbit === 2 ? 120 : 150,
+            top: nodeData.orbit === 2 ? 35 : 40,
+          }}
+        />
+        <Button
+          className="node-debug-button"
+          icon={<AiOutlineMinusSquare />}
+          style={{
+            left: nodeData.orbit === 2 ? 120 : 150,
+            top: nodeData.orbit === 2 ? 50 : 55,
+          }}
+        />
+      </Box>
     </div>
   );
 }
@@ -52,10 +119,12 @@ Node.propTypes = {
   }).isRequired,
   nodeRadius: PropTypes.number.isRequired,
   nodeName: PropTypes.string,
+  nodeImage: PropTypes.string,
 };
 
 Node.defaultProps = {
-  nodeName: 'NO INGREDIENT',
+  nodeImage: '',
+  nodeName: 'NO INGREDIENT'
 };
 
 export default Node;
