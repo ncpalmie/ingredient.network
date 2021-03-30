@@ -7,6 +7,12 @@
     border: 3px solid #E94F37;
 }
 
+.node-text {
+    position: absolute;
+    top: 135px;
+    left: 20px;
+}
+
 .node-img-container {
     height: 100%;
     width: 100%;
@@ -26,10 +32,6 @@
     border-radius: 50%;
     position: absolute;
     background: #E94F37;
-}
-
-.node-debug-button {
-    position: absolute;
 }
 
 .edge {

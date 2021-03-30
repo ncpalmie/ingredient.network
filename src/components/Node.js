@@ -1,38 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Box, Button } from 'grommet';
-import {
-  AiOutlinePlusSquare,
-  AiOutlineMinusSquare,
-  AiOutlineZoomIn,
-  AiOutlineZoomOut,
-} from 'react-icons/ai';
 import '../css/Graph.css';
 import axios from 'axios';
+import NodeEditor from './NodeEditor';
 
-const updateNodeImage = (attributeEndpoint, delta) => {
-  // CONTINUE SETTING UP IMAGE MANIPULATION ROUTES
-};
+// Update database with new ingredient image data
+const updateNodeImage = async (ingredientName, ingredientImage) => axios.patch(
+  `/ingredients/${ingredientName}/image`, { imageData: ingredientImage },
+);
 
 function Node(props) {
   const edgeWidth = 10;
   const {
     nodeData, nodeRadius, nodeName, nodeImage,
   } = props;
+  const [imageData, setImageData] = useState({
+    imgUrl: nodeImage.imgUrl,
+    imgHeightOffset: nodeImage.imgHeightOffset,
+    imgWidthOffset: nodeImage.imgWidthOffset,
+    imgTopOffset: nodeImage.imgTopOffset,
+    imgLeftOffset: nodeImage.imgLeftOffset,
+  });
 
   // Generate image element or null if no image data present
-  const imgHeight = 100 + nodeImage.imgHeightOffset;
-  const imgWidth = 100 + nodeImage.imgWidthOffset;
-  const nodeImageElement = nodeImage
+  const imgHeight = 100 + imageData.imgHeightOffset;
+  const imgWidth = 100 + imageData.imgWidthOffset;
+  const nodeImageElement = imageData
     ? (
       <img
-        src={nodeImage.imgUrl}
-        alt={nodeName}
+        src={imageData.imgUrl}
+        alt=""
         style={{
           height: `${imgHeight.toString()}%`,
           width: `${imgWidth.toString()}%`,
-          top: nodeImage.imgTopOffset,
-          left: nodeImage.imgLeftOffset,
+          top: imageData.imgTopOffset,
+          left: imageData.imgLeftOffset,
         }}
       />
     )
@@ -43,6 +45,19 @@ function Node(props) {
   const nodeY = nodeData.y - nodeRadius + (edgeWidth / 2);
   const smallNodeX = (nodeData.x + (edgeWidth / 2)) - (nodeRadius * 0.75) - edgeWidth / 2;
   const smallNodeY = nodeData.y - (nodeRadius * 0.75) + edgeWidth / 2;
+
+  const alterImageData = (attribute, delta) => {
+    const newImageData = {
+      imgUrl: imageData.imgUrl,
+      imgHeightOffset: imageData.imgHeightOffset,
+      imgWidthOffset: imageData.imgWidthOffset,
+      imgTopOffset: imageData.imgTopOffset,
+      imgLeftOffset: imageData.imgLeftOffset,
+    };
+    newImageData[attribute] += delta;
+    setImageData(newImageData);
+    updateNodeImage(nodeName, newImageData);
+  };
 
   return (
     <div
@@ -59,67 +74,14 @@ function Node(props) {
       <div className="node-img-container">
         {nodeImageElement}
       </div>
-      <p>
+      <p className="node-text">
         {nodeName}
         @
         {nodeData.x}
         ,
         {nodeData.y}
       </p>
-      <Box>
-        <Button
-          className="node-debug-button"
-          icon={<AiOutlineZoomOut />}
-          style={{
-            left: nodeData.orbit === 2 ? -45 : -40,
-            top: nodeData.orbit === 2 ? 40 : 60,
-          }}
-        />
-        <Button
-          className="node-debug-button"
-          icon={<AiOutlineZoomIn />}
-          style={{
-            left: nodeData.orbit === 2 ? -60 : -55,
-            top: nodeData.orbit === 2 ? 40 : 60,
-          }}
-        />
-      </Box>
-      <Box>
-        <Button
-          className="node-debug-button"
-          icon={<AiOutlinePlusSquare />}
-          style={{
-            left: nodeData.orbit === 2 ? 112 : 142,
-            top: nodeData.orbit === 2 ? 10 : 20,
-          }}
-        />
-        <Button
-          className="node-debug-button"
-          icon={<AiOutlineMinusSquare />}
-          style={{
-            left: nodeData.orbit === 2 ? 128 : 158,
-            top: nodeData.orbit === 2 ? 10 : 20,
-          }}
-        />
-      </Box>
-      <Box>
-        <Button
-          className="node-debug-button"
-          icon={<AiOutlinePlusSquare />}
-          style={{
-            left: nodeData.orbit === 2 ? 120 : 150,
-            top: nodeData.orbit === 2 ? 35 : 40,
-          }}
-        />
-        <Button
-          className="node-debug-button"
-          icon={<AiOutlineMinusSquare />}
-          style={{
-            left: nodeData.orbit === 2 ? 120 : 150,
-            top: nodeData.orbit === 2 ? 50 : 55,
-          }}
-        />
-      </Box>
+      <NodeEditor orbit={nodeData.orbit} alterImageData={alterImageData} />
     </div>
   );
 }
@@ -136,12 +98,12 @@ Node.propTypes = {
     id: PropTypes.number.isRequired,
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
-    orbit: PropTypes.number.isRequired,
+    orbit: PropTypes.number,
   }).isRequired,
   nodeRadius: PropTypes.number.isRequired,
   nodeName: PropTypes.string,
   nodeImage: PropTypes.shape({
-    imgUrl: PropTypes.string.isRequired,
+    imgUrl: PropTypes.string,
     imgHeightOffset: PropTypes.number.isRequired,
     imgWidthOffset: PropTypes.number.isRequired,
     imgTopOffset: PropTypes.number.isRequired,
@@ -150,7 +112,13 @@ Node.propTypes = {
 };
 
 Node.defaultProps = {
-  nodeImage: null,
+  nodeImage: {
+    imgUrl: '',
+    imgHeightOffset: 0,
+    imgWidthOffset: 0,
+    imgTopOffset: 0,
+    imgLeftOffset: 0,
+  },
   nodeName: 'NO INGREDIENT',
 };
 

@@ -1,13 +1,13 @@
 const express = require('express');
 
 const router = new express.Router();
+const regex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
 
 // Related mongoose models
 const ingredientsModel = require('../models/ingredient');
 
 // Route for getting ingredient data
 router.get('/ingredients/:name', (req, res) => {
-  const regex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
   ingredientsModel.findOne({ name: req.params.name.toLowerCase().replace(regex, '') }, (err, ingredient) => {
     if (err) {
       res.send(err);
@@ -17,11 +17,17 @@ router.get('/ingredients/:name', (req, res) => {
   });
 });
 
-// Route for updating image height offset
-router.patch('/ingredients/:name', (req, res) => {
-  const regex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
-  ingredientsModel.findOne({ name: req.params.name.toLowerCase().replace(regex, '') },
-    { $push: { imgHeightOffset: req.body.imgHeightOffset } },
+// Route for updating ingredient image information
+router.patch('/ingredients/:name/image', (req, res) => {
+  ingredientsModel.findOneAndUpdate({ name: req.params.name.toLowerCase().replace(regex, '') },
+    {
+      $set: {
+        imgHeightOffset: req.body.imageData.imgHeightOffset,
+        imgWidthOffset: req.body.imageData.imgWidthOffset,
+        imgTopOffset: req.body.imageData.imgTopOffset,
+        imgLeftOffset: req.body.imageData.imgLeftOffset,
+      },
+    },
     (err, ingredient) => {
       if (err) {
         res.send(err);
