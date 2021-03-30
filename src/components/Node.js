@@ -12,7 +12,7 @@ const updateNodeImage = async (ingredientName, ingredientImage) => axios.patch(
 function Node(props) {
   const edgeWidth = 10;
   const {
-    nodeData, nodeRadius, nodeName, nodeImage,
+    nodeData, nodeRadius, nodeName, nodeImage, newImgUrl,
   } = props;
   const [imageData, setImageData] = useState({
     imgUrl: nodeImage.imgUrl,
@@ -54,7 +54,11 @@ function Node(props) {
       imgTopOffset: imageData.imgTopOffset,
       imgLeftOffset: imageData.imgLeftOffset,
     };
-    newImageData[attribute] += delta;
+    if (attribute === 'imgUrl') {
+      newImageData[attribute] = newImgUrl;
+    } else {
+      newImageData[attribute] += delta;
+    }
     setImageData(newImageData);
     updateNodeImage(nodeName, newImageData);
   };
@@ -103,12 +107,13 @@ Node.propTypes = {
   nodeRadius: PropTypes.number.isRequired,
   nodeName: PropTypes.string,
   nodeImage: PropTypes.shape({
-    imgUrl: PropTypes.string,
+    imgUrl: PropTypes.string.isRequired,
     imgHeightOffset: PropTypes.number.isRequired,
     imgWidthOffset: PropTypes.number.isRequired,
     imgTopOffset: PropTypes.number.isRequired,
     imgLeftOffset: PropTypes.number.isRequired,
   }),
+  newImgUrl: PropTypes.string.isRequired,
 };
 
 Node.defaultProps = {

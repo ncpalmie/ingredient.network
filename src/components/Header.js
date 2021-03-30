@@ -5,8 +5,8 @@ import axios from 'axios';
 import '../css/Header.css';
 
 function Header(props) {
-  const { setSearchIngredient } = props;
-  const [searchText, setSearchText] = useState();
+  const { setSearchIngredient, setImgUrl } = props;
+  const [searchText, setSearchText] = useState('salmon');
 
   // Grabs matching ingredient data from database
   const getIngredientData = async (ingredientName) => {
@@ -21,7 +21,7 @@ function Header(props) {
         });
       }
     } catch (error) {
-      console.log(error);
+      // Deal with error gracefully
     }
   };
 
@@ -38,12 +38,14 @@ function Header(props) {
   return (
     <Box className="header-container">
       <TextInput onChange={(e) => setSearchText(e.target.value)} placeholder="Search for an ingredient..." />
+      <TextInput onChange={(e) => setImgUrl(e.target.value)} placeholder="Set an ingredient image URL..." />
     </Box>
   );
 }
 
 Header.propTypes = {
   setSearchIngredient: PropTypes.func.isRequired,
+  setImgUrl: PropTypes.func.isRequired,
 };
 
 export default Header;

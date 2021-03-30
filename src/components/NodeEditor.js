@@ -7,6 +7,7 @@ import {
   AiOutlineZoomIn,
   AiOutlineZoomOut,
 } from 'react-icons/ai';
+import { BiImageAdd } from 'react-icons/bi';
 import '../css/NodeEditor.css';
 
 function NodeEditor(props) {
@@ -70,6 +71,12 @@ function NodeEditor(props) {
           plain
         />
       </Box>
+      <Button
+        className={orbit === 2 ? 'small-node-editor-img' : 'node-editor-img'}
+        icon={<BiImageAdd />}
+        onClick={() => { alterImageData('imgUrl', ''); }}
+        plain
+      />
     </Box>
   );
 }

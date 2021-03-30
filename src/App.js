@@ -5,12 +5,22 @@ import Header from './components/Header';
 import './css/App.css';
 
 function App() {
-  const [searchIngredient, setSearchIngredient] = useState();
+  const [searchIngredient, setSearchIngredient] = useState({
+    name: 'Salmon',
+    strongConnections: ['lemon', 'dill', 'fennel', 'parsley', 'sage', 'salt', 'soy sauce'],
+    weakConnections: ['thyme', 'basil', 'bay leaf'],
+    imgUrl: 'https://upload.wikimedia.org/wikipedia/commons/6/61/Sesame_Soy_Glazed_Skuna_Bay_Salmon_-_2.jpg',
+    imgHeightOffset: 0,
+    imgWidthOffset: 0,
+    imgTopOffset: 0,
+    imgLeftOffset: 0,
+  });
+  const [imgUrl, setImgUrl] = useState();
 
   return (
     <Box>
-      <Header setSearchIngredient={setSearchIngredient} />
-      <Graph nodeRadius={75} searchIngredient={searchIngredient} />
+      <Header setSearchIngredient={setSearchIngredient} setImgUrl={setImgUrl} />
+      <Graph nodeRadius={75} searchIngredient={searchIngredient} newImgUrl={imgUrl} />
     </Box>
   );
 }

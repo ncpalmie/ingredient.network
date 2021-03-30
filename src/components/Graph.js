@@ -6,36 +6,11 @@ import Node from './Node';
 import Edge from './Edge';
 import '../css/Graph.css';
 
-// Generates a set of example nodes for testing
-const generateRandomNodes = (num) => {
-  const newNodes = [];
-  const newEdges = [];
-  const mainNode = {
-    id: 0, x: 750, y: 440, orbit: 0,
-  };
-
-  newNodes.push(mainNode);
-  for (let orbit = 1; orbit < 3; orbit += 1) {
-    for (let id = 1; id < num / 2; id += 1) {
-      newNodes.push({
-        id: orbit === 1 ? id : id + Math.ceil(num / 2 - 1),
-        orbit,
-        x: Math.floor(Math.random() * 1550),
-        y: Math.floor(Math.random() * 770),
-      });
-      newEdges.push({ n1: 0, n2: newNodes.slice(-1)[0].id });
-    }
-  }
-
-  return [newNodes, newEdges];
-};
-const graphData = generateRandomNodes(22);
-
 function Graph(props) {
-  const { nodeRadius, searchIngredient } = props;
+  const { nodeRadius, searchIngredient, newImgUrl } = props;
   const [mapData, setMapData] = useState({ scale: 1, translation: { x: 0, y: 0 } });
-  const [nodes, setNodes] = useState(graphData[0]);
-  const [edges, setEdges] = useState(graphData[1]);
+  const [nodes, setNodes] = useState([]);
+  const [edges, setEdges] = useState([]);
   const nextId = 0;
 
   // Generates edges using node locations
@@ -169,6 +144,7 @@ function Graph(props) {
               nodeData={node}
               nodeName={node.name}
               nodeImage={node.nodeImage}
+              newImgUrl={newImgUrl}
             />
           ))}
         </div>
@@ -190,6 +166,7 @@ Graph.propTypes = {
     imgTopOffset: PropTypes.number,
     imgLeftOffset: PropTypes.number,
   }),
+  newImgUrl: PropTypes.string,
 };
 
 Graph.defaultProps = {
@@ -204,6 +181,7 @@ Graph.defaultProps = {
     imgTopOffset: 0,
     imgLeftOffset: 0,
   },
+  newImgUrl: '',
 };
 
 export default Graph;

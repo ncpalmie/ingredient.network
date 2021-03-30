@@ -93,3 +93,15 @@
   top: 65px;
   position: absolute;
 }
+
+.small-node-editor-img {
+  left: 128px;
+  top: 55px;
+  position: absolute;
+}
+
+.node-editor-img {
+  left: 159px;
+  top: 85px;
+  position: absolute;
+}
