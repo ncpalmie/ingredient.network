@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import { MapInteractionCSS } from 'react-map-interaction';
 import { Button } from 'grommet';
@@ -9,9 +10,10 @@ import '../css/Graph.css';
 function Graph(props) {
   const { nodeRadius, searchIngredient, newImgUrl } = props;
   const [mapData, setMapData] = useState({ scale: 1, translation: { x: 0, y: 0 } });
-  const [nodes, setNodes] = useState([]);
-  const [edges, setEdges] = useState([]);
+  let nodes = [];
+  let edges = [];
   const nextId = 0;
+  console.log('graph');
 
   // Generates edges using node locations
   const getEdgeData = (id1, id2) => {
@@ -63,7 +65,7 @@ function Graph(props) {
       return node;
     });
 
-    setNodes(newNodes);
+    nodes = newNodes;
   };
 
   // Generates single node from given ingredient data
@@ -87,7 +89,7 @@ function Graph(props) {
     let id = 1;
     const newNodes = [];
     const newEdges = [];
-    const mainNode = generateNodeFromIngredient(searchIngredient);
+    const mainNode = generateNodeFromIngredient(searchIngredient, 0);
     newNodes.push(mainNode);
 
     // Form strong node connections
@@ -115,16 +117,12 @@ function Graph(props) {
       newEdges.push({ n1: 0, n2: id });
       id += 1;
     });
-
-    setNodes(newNodes);
-    setEdges(newEdges);
+    nodes = newNodes;
+    edges = newEdges;
   };
 
-  useEffect(() => {
-    if (searchIngredient) {
-      generateNodes();
-    }
-  }, [searchIngredient]);
+  //Create nodes before rendering
+  generateNodes();
 
   return (
     <div>

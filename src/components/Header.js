@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Box, TextInput } from 'grommet';
@@ -6,7 +7,9 @@ import '../css/Header.css';
 
 function Header(props) {
   const { setSearchIngredient, setImgUrl } = props;
-  const [searchText, setSearchText] = useState('salmon');
+  let searchText = 'salmon';
+  let typingTimeout = 0;
+  console.log('header');
 
   // Grabs matching ingredient data from database
   const getIngredientData = async (ingredientName) => {
@@ -25,19 +28,18 @@ function Header(props) {
     }
   };
 
-  // UseEffect to update search term after a period of no user input
-  useEffect(() => {
-    const delaySearch = setTimeout(() => {
-      if (searchText) {
-        getIngredientData(searchText);
-      }
-    }, 500);
-    return () => clearTimeout(delaySearch);
-  }, [searchText]);
+  // Updates search term after typing delay
+  const getSearchText = (e) => {
+    searchText = e.target.value;
+    if (typingTimeout) clearTimeout(typingTimeout);
+    typingTimeout = setTimeout(() => {
+      getIngredientData(searchText);
+    }, 500)
+  };
 
   return (
     <Box className="header-container">
-      <TextInput onChange={(e) => setSearchText(e.target.value)} placeholder="Search for an ingredient..." />
+      <TextInput onChange={(e) => getSearchText(e)} placeholder="Search for an ingredient..." />
       <TextInput onChange={(e) => setImgUrl(e.target.value)} placeholder="Set an ingredient image URL..." />
     </Box>
   );

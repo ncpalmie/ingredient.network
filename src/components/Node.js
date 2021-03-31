@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import '../css/Graph.css';
 import axios from 'axios';
@@ -9,36 +9,57 @@ const updateNodeImage = async (ingredientName, ingredientImage) => axios.patch(
   `/ingredients/${ingredientName}/image`, { imageData: ingredientImage },
 );
 
+// Fetch node image data
+const fetchImageData = (ingredientName) => {
+  const [data, setData] = useState(null);
+
+  async function fetchData() {
+    const response = await axios.get(`/ingredients/${ingredientName}/image`);
+    setData(response.data);
+  }
+
+  useEffect(() => { fetchData(); }, [ingredientName]);
+
+  if (!data) {
+    return {
+      imgUrl: '',
+      imgHeightOffset: 0,
+      imgWidthOffset: 0,
+      imgTopOffset: 0,
+      imgLeftOffset: 0,
+    };
+  }
+
+  return {
+    imgUrl: data.imgUrl,
+    imgHeightOffset: data.imgHeightOffset,
+    imgWidthOffset: data.imgWidthOffset,
+    imgTopOffset: data.imgTopOffset,
+    imgLeftOffset: data.imgLeftOffset,
+  };
+};
+
 function Node(props) {
   const edgeWidth = 10;
   const {
-    nodeData, nodeRadius, nodeName, nodeImage, newImgUrl,
+    nodeData, nodeRadius, nodeName, newImgUrl,
   } = props;
-  const [imageData, setImageData] = useState({
-    imgUrl: nodeImage.imgUrl,
-    imgHeightOffset: nodeImage.imgHeightOffset,
-    imgWidthOffset: nodeImage.imgWidthOffset,
-    imgTopOffset: nodeImage.imgTopOffset,
-    imgLeftOffset: nodeImage.imgLeftOffset,
-  });
-
-  // Generate image element or null if no image data present
+  const [imageData, setImageData] = useState(fetchImageData(nodeName));
   const imgHeight = 100 + imageData.imgHeightOffset;
   const imgWidth = 100 + imageData.imgWidthOffset;
-  const nodeImageElement = imageData
-    ? (
-      <img
-        src={imageData.imgUrl}
-        alt=""
-        style={{
-          height: `${imgHeight.toString()}%`,
-          width: `${imgWidth.toString()}%`,
-          top: imageData.imgTopOffset,
-          left: imageData.imgLeftOffset,
-        }}
-      />
-    )
-    : null;
+  const imageElement = imageData ? (
+    <img
+      src={imageData.imgUrl}
+      alt=""
+      style={{
+        height: `${imgHeight.toString()}%`,
+        width: `${imgWidth.toString()}%`,
+        top: imageData.imgTopOffset,
+        left: imageData.imgLeftOffset,
+      }}
+    />
+  ) : null;
+  console.log('node');
 
   // Node positioning math
   const nodeX = (nodeData.x) - nodeRadius + (edgeWidth / 2);
@@ -76,7 +97,7 @@ function Node(props) {
       }}
     >
       <div className="node-img-container">
-        {nodeImageElement}
+        {imageElement}
       </div>
       <p className="node-text">
         {nodeName}
@@ -91,13 +112,6 @@ function Node(props) {
 }
 
 Node.propTypes = {
-  // mapInfo: PropTypes.shape({
-  //   scale: PropTypes.number.isRequired,
-  //   translation: PropTypes.shape({
-  //     x: PropTypes.number.isRequired,
-  //     y: PropTypes.number.isRequired,
-  //   }),
-  // }).isRequired,
   nodeData: PropTypes.shape({
     id: PropTypes.number.isRequired,
     x: PropTypes.number.isRequired,
@@ -106,24 +120,10 @@ Node.propTypes = {
   }).isRequired,
   nodeRadius: PropTypes.number.isRequired,
   nodeName: PropTypes.string,
-  nodeImage: PropTypes.shape({
-    imgUrl: PropTypes.string.isRequired,
-    imgHeightOffset: PropTypes.number.isRequired,
-    imgWidthOffset: PropTypes.number.isRequired,
-    imgTopOffset: PropTypes.number.isRequired,
-    imgLeftOffset: PropTypes.number.isRequired,
-  }),
   newImgUrl: PropTypes.string.isRequired,
 };
 
 Node.defaultProps = {
-  nodeImage: {
-    imgUrl: '',
-    imgHeightOffset: 0,
-    imgWidthOffset: 0,
-    imgTopOffset: 0,
-    imgLeftOffset: 0,
-  },
   nodeName: 'NO INGREDIENT',
 };
 

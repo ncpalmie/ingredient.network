@@ -17,11 +17,24 @@ router.get('/ingredients/:name', (req, res) => {
   });
 });
 
+// Route for getting ingredient image information
+router.get('/ingredients/:name/image', (req, res) => {
+  ingredientsModel.findOne({ name: req.params.name.toLowerCase().replace(regex, '') },
+    'imgUrl imgHeightOffset imgWidthOffset imgTopOffset imgLeftOffset', (err, imageData) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(imageData);
+      }
+    });
+});
+
 // Route for updating ingredient image information
 router.patch('/ingredients/:name/image', (req, res) => {
   ingredientsModel.findOneAndUpdate({ name: req.params.name.toLowerCase().replace(regex, '') },
     {
       $set: {
+        imgUrl: req.body.imageData.imgUrl,
         imgHeightOffset: req.body.imageData.imgHeightOffset,
         imgWidthOffset: req.body.imageData.imgWidthOffset,
         imgTopOffset: req.body.imageData.imgTopOffset,

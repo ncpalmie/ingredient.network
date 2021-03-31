@@ -16,6 +16,7 @@ function App() {
     imgLeftOffset: 0,
   });
   const [imgUrl, setImgUrl] = useState();
+  console.log('app');
 
   return (
     <Box>
