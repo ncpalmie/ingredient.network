@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import '../css/Graph.css';
 import axios from 'axios';
@@ -14,31 +14,27 @@ function Node(props) {
   const {
     nodeData, nodeRadius, nodeName, nodeImage, newImgUrl,
   } = props;
-  const [imageData, setImageData] = useState({
-    imgUrl: nodeImage.imgUrl,
-    imgHeightOffset: nodeImage.imgHeightOffset,
-    imgWidthOffset: nodeImage.imgWidthOffset,
-    imgTopOffset: nodeImage.imgTopOffset,
-    imgLeftOffset: nodeImage.imgLeftOffset,
-  });
+  const [imageData, setImageData] = useState(nodeImage);
+
+  useEffect(() => {
+    setImageData(nodeImage);
+  }, [nodeImage]);
 
   // Generate image element or null if no image data present
   const imgHeight = 100 + imageData.imgHeightOffset;
   const imgWidth = 100 + imageData.imgWidthOffset;
-  const nodeImageElement = imageData
-    ? (
-      <img
-        src={imageData.imgUrl}
-        alt=""
-        style={{
-          height: `${imgHeight.toString()}%`,
-          width: `${imgWidth.toString()}%`,
-          top: imageData.imgTopOffset,
-          left: imageData.imgLeftOffset,
-        }}
-      />
-    )
-    : null;
+  const imageElement = (
+    <img
+      src={imageData.imgUrl}
+      alt=""
+      style={{
+        height: `${imgHeight.toString()}%`,
+        width: `${imgWidth.toString()}%`,
+        top: imageData.imgTopOffset,
+        left: imageData.imgLeftOffset,
+      }}
+    />
+  );
 
   // Node positioning math
   const nodeX = (nodeData.x) - nodeRadius + (edgeWidth / 2);
@@ -65,6 +61,7 @@ function Node(props) {
 
   return (
     <div
+      key={nodeName}
       className={nodeData.orbit === 2 ? 'small-node' : 'node'}
       label="node"
       onKeyDown={() => {}}
@@ -76,7 +73,7 @@ function Node(props) {
       }}
     >
       <div className="node-img-container">
-        {nodeImageElement}
+        {imageElement}
       </div>
       <p className="node-text">
         {nodeName}
