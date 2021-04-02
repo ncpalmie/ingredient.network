@@ -11,7 +11,7 @@ function Graph(props) {
   const [mapData, setMapData] = useState({ scale: 1, translation: { x: 0, y: 0 } });
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
-  const nextId = 0;
+  let nextId = 0;
 
   // Generates edges using node locations
   const getEdgeData = (id1, id2) => {
@@ -84,36 +84,24 @@ function Graph(props) {
 
   // Generates nodes based on ingredient connections
   const generateNodes = () => {
-    let id = 1;
     const newNodes = [];
     const newEdges = [];
-    const mainNode = generateNodeFromIngredient(searchIngredient);
+    const mainNode = generateNodeFromIngredient(searchIngredient, 0);
     newNodes.push(mainNode);
+    nextId += 1;
 
     // Form strong node connections
     searchIngredient.strongConnections.forEach((ingredient) => {
-      newNodes.push({
-        name: ingredient,
-        id,
-        x: 0,
-        y: 0,
-        orbit: 1,
-      });
-      newEdges.push({ n1: 0, n2: id });
-      id += 1;
+      newNodes.push(generateNodeFromIngredient(ingredient, 1));
+      newEdges.push({ n1: 0, n2: nextId });
+      nextId += 1;
     });
 
     // Form weak node connections
     searchIngredient.weakConnections.forEach((ingredient) => {
-      newNodes.push({
-        name: ingredient,
-        id,
-        x: 0,
-        y: 0,
-        orbit: 2,
-      });
-      newEdges.push({ n1: 0, n2: id });
-      id += 1;
+      newNodes.push(generateNodeFromIngredient(ingredient, 2));
+      newEdges.push({ n1: 0, n2: nextId });
+      nextId += 1;
     });
 
     setNodes(newNodes);
@@ -158,8 +146,8 @@ Graph.propTypes = {
   searchIngredient: PropTypes.shape({
     _id: PropTypes.string,
     name: PropTypes.string,
-    strongConnections: PropTypes.arrayOf(PropTypes.string),
-    weakConnections: PropTypes.arrayOf(PropTypes.string),
+    strongConnections: PropTypes.arrayOf(PropTypes.object),
+    weakConnections: PropTypes.arrayOf(PropTypes.object),
     imgUrl: PropTypes.string,
     imgHeightOffset: PropTypes.number,
     imgWidthOffset: PropTypes.number,

@@ -104,11 +104,11 @@ Node.propTypes = {
   nodeRadius: PropTypes.number.isRequired,
   nodeName: PropTypes.string,
   nodeImage: PropTypes.shape({
-    imgUrl: PropTypes.string.isRequired,
-    imgHeightOffset: PropTypes.number.isRequired,
-    imgWidthOffset: PropTypes.number.isRequired,
-    imgTopOffset: PropTypes.number.isRequired,
-    imgLeftOffset: PropTypes.number.isRequired,
+    imgUrl: PropTypes.string,
+    imgHeightOffset: PropTypes.number,
+    imgWidthOffset: PropTypes.number,
+    imgTopOffset: PropTypes.number,
+    imgLeftOffset: PropTypes.number,
   }),
   newImgUrl: PropTypes.string.isRequired,
 };

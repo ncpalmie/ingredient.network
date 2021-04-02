@@ -12,8 +12,21 @@ function Header(props) {
   const getIngredientData = async (ingredientName) => {
     try {
       const ingredientData = await axios.get(`/ingredients/${ingredientName}`);
+
       if (ingredientData.data) {
-        setSearchIngredient(ingredientData.data);
+        const ingredient = ingredientData.data;
+
+        ingredient.strongConnections = await Promise.all(ingredient.strongConnections.map((strongIng) => axios.get(`/ingredients/${strongIng}`)));
+        ingredient.strongConnections = ingredient.strongConnections.map(
+          (response) => response.data,
+        );
+
+        ingredient.weakConnections = await Promise.all(ingredient.weakConnections.map((weakIng) => axios.get(`/ingredients/${weakIng}`)));
+        ingredient.weakConnections = ingredient.weakConnections.map(
+          (response) => response.data,
+        );
+
+        setSearchIngredient(ingredient);
       } else {
         // Replace this with 'No ingredient found, did you mean...' functionality
         setSearchIngredient({

@@ -7,8 +7,8 @@ import './css/App.css';
 function App() {
   const [searchIngredient, setSearchIngredient] = useState({
     name: 'Salmon',
-    strongConnections: ['lemon', 'dill', 'fennel', 'parsley', 'sage', 'salt', 'soy sauce'],
-    weakConnections: ['thyme', 'basil', 'bay leaf'],
+    strongConnections: [],
+    weakConnections: [],
     imgUrl: 'https://upload.wikimedia.org/wikipedia/commons/6/61/Sesame_Soy_Glazed_Skuna_Bay_Salmon_-_2.jpg',
     imgHeightOffset: 0,
     imgWidthOffset: 0,
