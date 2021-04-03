@@ -22,12 +22,13 @@ router.patch('/ingredients/:name/image', (req, res) => {
   ingredientsModel.findOneAndUpdate({ name: req.params.name.toLowerCase().replace(regex, '') },
     {
       $set: {
+        imgUrl: req.body.imageData.imgUrl,
         imgHeightOffset: req.body.imageData.imgHeightOffset,
         imgWidthOffset: req.body.imageData.imgWidthOffset,
         imgTopOffset: req.body.imageData.imgTopOffset,
         imgLeftOffset: req.body.imageData.imgLeftOffset,
       },
-    },
+    }, { upsert: true },
     (err, ingredient) => {
       if (err) {
         res.send(err);

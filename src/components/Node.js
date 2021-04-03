@@ -43,12 +43,13 @@ function Node(props) {
   const smallNodeY = nodeData.y - (nodeRadius * 0.75) + edgeWidth / 2;
 
   const alterImageData = (attribute, delta) => {
+    // Tertiary operators prevent null values in DB for numerical values
     const newImageData = {
-      imgUrl: imageData.imgUrl,
-      imgHeightOffset: imageData.imgHeightOffset,
-      imgWidthOffset: imageData.imgWidthOffset,
-      imgTopOffset: imageData.imgTopOffset,
-      imgLeftOffset: imageData.imgLeftOffset,
+      imgUrl: imageData.imgUrl ? imageData.imgUrl : '',
+      imgHeightOffset: imageData.imgHeightOffset ? imageData.imgHeightOffset : 0,
+      imgWidthOffset: imageData.imgWidthOffset ? imageData.imgWidthOffset : 0,
+      imgTopOffset: imageData.imgTopOffset ? imageData.imgTopOffset : 0,
+      imgLeftOffset: imageData.imgLeftOffset ? imageData.imgLeftOffset : 0,
     };
     if (attribute === 'imgUrl') {
       newImageData[attribute] = newImgUrl;
@@ -75,7 +76,7 @@ function Node(props) {
       <div className="node-img-container">
         {imageElement}
       </div>
-      <p className="node-text">
+      <p className={nodeData.orbit === 2 ? 'small-node-text' : 'node-text'}>
         {nodeName}
         @
         {nodeData.x}

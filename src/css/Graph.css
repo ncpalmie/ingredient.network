@@ -3,8 +3,8 @@
     height: 150px;
     border-radius: 50%;
     position: absolute;
-    background: #E94F37;
-    border: 3px solid #E94F37;
+    background: #0F0F3F;
+    border: 3px solid #0F0F3F;
 }
 
 .node-text {
@@ -31,19 +31,31 @@
     height: 120px;
     border-radius: 50%;
     position: absolute;
-    background: #E94F37;
+    background: #0F0F3F;
+    border: 3px solid #0F0F3F;
+}
+
+.small-node-text {
+    position: absolute;
+    top: 110px;
+    left: 20px;
+}
+
+.small-node img {
+    border-radius: 50%;
+    position: absolute;
 }
 
 .edge {
-    background:#3775e9;
+    background: #2F3061;
     width: 10px;
     border: 0px;
     position: absolute;
 }
 
 .small-edge {
-    background:#3775e9;
-    width: 6px;
+    background:#2F3061;
+    width: 4px;
     border: 0px;
     position: absolute;
 }
@@ -52,5 +64,4 @@
     width: 100vw;
     height: 80vh;
     position: relative;
-    border: 3px solid #0F0F3F
 }
