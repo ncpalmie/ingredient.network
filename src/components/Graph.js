@@ -20,6 +20,8 @@ function Graph(props) {
     const edgeNodes = nodes.filter((node) => (node.id === id1 || node.id === id2));
     [n1, n2] = edgeNodes;
 
+    console.log(nodes);
+
     const angle = (n1.y >= n2.y ? Math.PI : 0) + -Math.atan((n1.x - n2.x) / (n1.y - n2.y));
     const dist = (Math.sqrt((n2.x - n1.x) ** 2 + (n2.y - n1.y) ** 2));
     const x = n1.x - ((dist / 2) * Math.sin(angle));
@@ -56,14 +58,14 @@ function Graph(props) {
       if (node.orbit === 2) {
         const newNode = node;
         outerIncrementAngle += (2 * Math.PI) / numInnerNodes;
-        newNode.x = Math.floor(nodes[0].x + (radius * 1.75 * Math.sin(outerIncrementAngle)));
-        newNode.y = Math.floor(nodes[0].y - (radius * 1.75 * Math.cos(outerIncrementAngle)));
+        newNode.x = Math.floor(nodes[0].x + (radius * 1.55 * Math.sin(outerIncrementAngle)));
+        newNode.y = Math.floor(nodes[0].y - (radius * 1.55 * Math.cos(outerIncrementAngle)));
         return newNode;
       }
       return node;
     });
 
-    setNodes(newNodes);
+    return newNodes;
   };
 
   // Generates single node from given ingredient data
@@ -116,7 +118,6 @@ function Graph(props) {
 
   return (
     <div>
-      <Button label="Orbit Nodes" onClick={() => { orbitNodes(300); }} />
       <MapInteractionCSS value={mapData} onChange={(value) => setMapData(value)}>
         <div className="graph">
           {edges.map((edge) => (
@@ -125,7 +126,7 @@ function Graph(props) {
               edgeData={getEdgeData(edge.n1, edge.n2)}
             />
           ))}
-          {nodes.map((node) => (
+          {orbitNodes(300).map((node) => (
             <Node
               key={node.id}
               nodeRadius={nodeRadius}
