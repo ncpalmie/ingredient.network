@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { MapInteractionCSS } from 'react-map-interaction';
-import { Button } from 'grommet';
 import PropTypes from 'prop-types';
 import Node from './Node';
 import Edge from './Edge';
